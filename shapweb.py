@@ -4,24 +4,38 @@ import joblib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
 import os
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 
-# 使用相对路径加载字体
+# 打印当前工作目录
+print("当前工作目录：", os.getcwd())
+
+# 确认字体文件是否存在
 font_path = "./simhei.ttf"
 if os.path.exists(font_path):
-    print("字体文件存在，加载字体...")
-    font_prop = FontProperties(fname=font_path)
-    plt.rcParams['font.family'] = font_prop.get_name()
-    plt.rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
-else:
-    print("字体文件未找到，请检查路径：", font_path)
+    print("字体文件已找到，加载中：", font_path)
+    try:
+        # 加载字体
+        font_prop = FontProperties(fname=font_path)
+        plt.rcParams['font.family'] = font_prop.get_name()
+        plt.rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+        print("字体加载成功：", font_prop.get_name())
 
-# 测试绘图
-plt.plot([1, 2, 3], [1, 4, 9])
-plt.title('测试中文显示', fontproperties=font_prop)
-plt.show()
+        # 测试绘图
+        plt.plot([1, 2, 3], [1, 4, 9])
+        plt.title('测试中文显示', fontproperties=font_prop)
+        plt.show()
+    except Exception as e:
+        print("字体加载失败，错误信息：", e)
+else:
+    print("字体文件未找到，请检查路径！")
+
+# 刷新字体缓存
+import matplotlib as mpl
+print("Matplotlib 字体缓存路径：", mpl.get_cachedir())
+
 
 
 def main():
