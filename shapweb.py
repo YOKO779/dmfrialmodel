@@ -32,18 +32,23 @@ import requests
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import matplotlib.font_manager as fm
-import io
+import os
 
 # GitHub上的字体文件Raw URL
 font_url = 'https://raw.githubusercontent.com/YOKO779/dmfrialmodel/master/simhei.ttf'
 
-# 使用requests下载字体文件
+# 下载字体文件到本地临时路径
+font_path = "simhei.ttf"
 response = requests.get(font_url)
+
+# 确保字体文件成功下载
 if response.status_code == 200:
-    font_bytes = io.BytesIO(response.content)
+    with open(font_path, "wb") as f:
+        f.write(response.content)
+    print("字体文件已成功下载并保存到本地：", font_path)
 
     # 使用Matplotlib的FontProperties加载字体
-    font_prop = fm.FontProperties(fname=font_bytes)
+    font_prop = fm.FontProperties(fname=font_path)
 
     # 设置Matplotlib使用的中文字体
     rcParams['font.family'] = font_prop.get_name()
@@ -53,8 +58,12 @@ if response.status_code == 200:
     plt.plot([1, 2, 3], [1, 4, 9])
     plt.title('测试中文显示', fontproperties=font_prop)
     plt.show()
+
+    # 删除临时字体文件
+    os.remove(font_path)
+    print("临时字体文件已删除。")
 else:
-    print("无法加载字体文件，HTTP状态码:", response.status_code)
+    print("无法下载字体文件，HTTP状态码:", response.status_code)
 
 
 
