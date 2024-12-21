@@ -9,23 +9,20 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import matplotlib.font_manager as fm
 
-# 字体文件的本地路径
-font_path = r"D:\gitapp\simhei.ttf"
+# 明确指定字体路径
+font_path = r"D:\gitapp\simhei.ttf"  # 确保字体文件路径正确
+font_prop = fm.FontProperties(fname=font_path)  # 使用 FontProperties 加载字体
 
-# 检查字体文件是否存在
-try:
-    font_prop = fm.FontProperties(fname=font_path)  # 加载字体
-    rcParams['font.family'] = font_prop.get_name()  # 设置全局字体
-    rcParams['axes.unicode_minus'] = False          # 防止负号显示问题
+# 设置 Matplotlib 的全局字体
+rcParams['font.family'] = font_prop.get_name()
+rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 
-    # 测试绘图
-    plt.plot([1, 2, 3], [1, 4, 9])
-    plt.title('测试中文显示', fontproperties=font_prop)
-    plt.show()
-
-    print(f"字体文件加载成功：{font_path}")
-except FileNotFoundError:
-    print(f"字体文件不存在，请检查路径：{font_path}")
+# 测试绘图，验证中文是否正常显示
+plt.plot([1, 2, 3], [1, 4, 9])
+plt.title('测试中文显示', fontproperties=font_prop)  # 使用指定字体
+plt.xlabel('测试X轴', fontproperties=font_prop)     # 使用指定字体
+plt.ylabel('测试Y轴', fontproperties=font_prop)     # 使用指定字体
+plt.show()
 
 
 def main():
