@@ -4,31 +4,18 @@ import joblib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
-import os
-import matplotlib.pyplot as plt
+from matplotlib import rcParams
 from matplotlib.font_manager import FontProperties
+import os
 
-# 自动获取当前目录下的字体文件路径
-font_path = os.path.join(os.path.dirname(__file__), "simhei.ttf")
-print("字体文件路径：", font_path)
-
-# 检查字体文件是否存在
-if not os.path.exists(font_path):
-    raise FileNotFoundError(f"字体文件未找到：{font_path}")
-
-# 加载字体
-font_prop = FontProperties(fname=font_path)
-
-# 设置字体为全局字体
-plt.rcParams['font.family'] = font_prop.get_name()
-plt.rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
-
-# 测试绘图
-plt.plot([1, 2, 3], [1, 4, 9])
-plt.title('测试中文显示', fontproperties=font_prop)
-plt.show()
-
+# 设置全局中文字体
+font_path = "D:/gitapp/simhei.ttf"  # 替换为你的字体路径
+if os.path.exists(font_path):
+    font_prop = FontProperties(fname=font_path)
+    rcParams['font.family'] = font_prop.get_name()
+    rcParams['axes.unicode_minus'] = False
+else:
+    st.error(f"字体文件未找到：{font_path}")
 
 def main():
     # 加载模型
@@ -84,6 +71,7 @@ def main():
                 shap.force_plot(
                     explainer.expected_value, shap_values[0], df_subject.iloc[0, :], matplotlib=True
                 )
+            plt.title("特征贡献力图", fontproperties=font_prop)  # 设置中文标题字体
             st.pyplot(plt.gcf())  # 渲染图形
 
     # 页面配置和UI
@@ -94,7 +82,6 @@ def main():
                     <h1 style='text-align: center;'>老年糖尿病患者衰弱风险预测</h1>
                 </div>
                 """, unsafe_allow_html=True)
-
     认知障碍 = st.selectbox("认知障碍 (是 = 1, 否 = 0)", [1, 0], index=1)
     体育锻炼运动量 = st.selectbox("体育锻炼运动量 (低运动量 = 1, 中运动量 = 2, 高运动量 = 3)", [1, 2, 3], index=0)
     慢性疼痛 = st.selectbox("慢性疼痛 (有 = 1, 无 = 0)", [1, 0], index=1)
