@@ -6,13 +6,20 @@ import joblib
 import pandas as pd
 import numpy as np
 import streamlit as st
+import os
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+import matplotlib.font_manager as fm
 
-# 设置全局字体为 SimHei（黑体）
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用中文黑体
-plt.rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+# 设置字体路径为项目根目录下的 SimHei.ttf
+font_path = "./simhei.ttf"  # SimHei.ttf 文件应放在项目根目录
+if not os.path.exists(font_path):
+    raise FileNotFoundError("找不到 SimHei.ttf 文件，请将其上传到项目根目录")
 
-# 检查字体加载情况
-print("当前字体设置:", plt.rcParams['font.sans-serif'])
+# 加载字体
+font_prop = fm.FontProperties(fname=font_path)
+rcParams['font.family'] = font_prop.get_name()  # 设置全局字体
+rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 
 def main():
     # 加载模型
