@@ -6,6 +6,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams, font_manager
 
+from matplotlib import rcParams, font_manager
+
+# 强制设置字体路径
+font_path = "/完整路径/simhei.ttf"  # 替换为你的字体路径
+font = font_manager.FontProperties(fname=font_path)
+
+# 设置全局字体
+rcParams["font.family"] = font.get_name()
+rcParams["axes.unicode_minus"] = False  # 确保负号正常显示
+
+
+
 # 设置中文字体路径
 font_path = "simhei.ttf"  # 确保字体文件路径正确
 font = font_manager.FontProperties(fname=font_path)
