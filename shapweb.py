@@ -6,9 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def main():
-    lgbm = joblib.load('./python/xgb_model.pkl')   # 本地测试路径，根据pkl文件所在位置进行更改
-    # lgbm = joblib.load('./xgb_model.pkl')  # 上传到github所需路径，路径无需更改
-    # 定义特征输入类
+    # 加载模型
+    lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
+    
     class Subject:
         def __init__(self, 认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病):
             self.认知障碍 = 认知障碍
