@@ -7,8 +7,8 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-# 设置 Matplotlib 全局字体为微软雅黑（Microsoft YaHei）
-plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']  # 使用微软雅黑字体
+# 设置全局字体为 SimHei（黑体）
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用中文黑体
 plt.rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 
 # 检查字体加载情况
@@ -70,7 +70,7 @@ def main():
                 )
 
             # 设置中文标题
-            plt.title("特征贡献力图")  # 无需单独指定字体，因为全局已经设置
+            plt.title("特征贡献力图")  # 全局字体已设置，无需显式指定
             st.pyplot(plt.gcf())  # 渲染图形
 
     # 页面配置和UI
