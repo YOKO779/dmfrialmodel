@@ -5,6 +5,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# 设置中文字体
+font_path = "./simhei.ttf"  # 确保字体路径正确
+font = font_manager.FontProperties(fname=font_path)
+rcParams["font.family"] = font.get_name()
+
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
