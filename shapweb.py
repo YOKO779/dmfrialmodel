@@ -2,19 +2,16 @@ def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
 
-    # 获取模型的特征名称
-    model_feature_names = lgbm.get_booster().feature_names
-
-    # 中文特征名到模型特征名的映射
+    # 特征名映射：中文 -> 英文
     feature_mapping = {
-        "认知障碍": model_feature_names[0],  # 对应的模型特征名称
-        "体育锻炼运动量": model_feature_names[1],
-        "慢性疼痛": model_feature_names[2],
-        "营养状态": model_feature_names[3],
-        "HbA1c": model_feature_names[4],
-        "查尔斯共病指数": model_feature_names[5],
-        "步速下降": model_feature_names[6],
-        "糖尿病肾病": model_feature_names[7],
+        "认知障碍": "CognitiveImpairment",
+        "体育锻炼运动量": "ExerciseAmount",
+        "慢性疼痛": "ChronicPain",
+        "营养状态": "NutritionStatus",
+        "HbA1c": "HbA1c",
+        "查尔斯共病指数": "CharlsonIndex",
+        "步速下降": "GaitDecline",
+        "糖尿病肾病": "DiabeticNephropathy"
     }
 
     class Subject:
@@ -29,7 +26,7 @@ def main():
             self.糖尿病肾病 = 糖尿病肾病
 
         def make_predict(self, lgbm):
-            # 将输入数据转化为 DataFrame（使用中文列名）
+            # 将输入数据转化为 DataFrame
             subject_data = {
                 "认知障碍": [self.认知障碍],
                 "体育锻炼运动量": [self.体育锻炼运动量],
@@ -41,9 +38,10 @@ def main():
                 "糖尿病肾病": [self.糖尿病肾病]
             }
 
+            # 创建 DataFrame
             df_subject = pd.DataFrame(subject_data)
 
-            # 映射列名为模型的特征名称
+            # 重命名列名为模型的特征名
             df_subject.rename(columns=feature_mapping, inplace=True)
 
             # 模型预测
