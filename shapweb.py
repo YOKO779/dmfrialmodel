@@ -6,41 +6,23 @@ import joblib
 import pandas as pd
 import numpy as np
 import streamlit as st
-import os
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
-import matplotlib.font_manager as fm
-import os
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
-import matplotlib.font_manager as fm
-import shap
-import joblib
-import pandas as pd
-import numpy as np
-import streamlit as st
 
-import os
-import matplotlib.font_manager as fm
-
-# 构建字体路径
-font_dir = r"D:\dmfrailmodel"
-font_name = "simsunb.ttf"
-font_path = os.path.join(font_dir, font_name)
-
-# 加载字体
-font_prop = fm.FontProperties(fname=font_path)
-
-# 测试字体是否加载成功
-import matplotlib.pyplot as plt
-plt.figure()
-plt.title('测试中文显示', fontproperties=font_prop)
-plt.text(0.5, 0.5, '中文测试', fontproperties=font_prop)
-plt.show()
 
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
+
+    # 中文特征名到英文特征名的映射
+    feature_mapping = {
+        "认知障碍": "CognitiveImpairment",
+        "体育锻炼运动量": "ExerciseAmount",
+        "慢性疼痛": "ChronicPain",
+        "营养状态": "NutritionStatus",
+        "HbA1c": "HbA1c",
+        "查尔斯共病指数": "CharlsonIndex",
+        "步速下降": "GaitDecline",
+        "糖尿病肾病": "DiabeticNephropathy"
+    }
 
     class Subject:
         def __init__(self, 认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病):
@@ -54,7 +36,7 @@ def main():
             self.糖尿病肾病 = 糖尿病肾病
 
         def make_predict(self, lgbm):
-            # 将输入数据转化为 DataFrame
+            # 将输入数据转化为 DataFrame（使用中文列名）
             subject_data = {
                 "认知障碍": [self.认知障碍],
                 "体育锻炼运动量": [self.体育锻炼运动量],
@@ -67,6 +49,9 @@ def main():
             }
 
             df_subject = pd.DataFrame(subject_data)
+
+            # 映射列名为英文（用于 SHAP 图）
+            df_subject.rename(columns=feature_mapping, inplace=True)
 
             # 模型预测
             prediction = lgbm.predict_proba(df_subject)[:, 1]
