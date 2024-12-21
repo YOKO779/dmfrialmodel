@@ -19,7 +19,8 @@ def main():
             self.查尔斯共病指数 = 查尔斯共病指数
             self.步速下降 = 步速下降
             self.糖尿病肾病 = 糖尿病肾病
-            
+
+        def make_predict(self, lgbm):
             # 将输入数据转化为 DataFrame
             subject_data = {
                 "认知障碍": [self.认知障碍],
@@ -45,19 +46,20 @@ def main():
                 </div>
             """, unsafe_allow_html=True)
 
-
-
-            explainer = shap.Explainer(lgbm)
+            # SHAP 可视化
+            explainer = shap.TreeExplainer(lgbm)
             shap_values = explainer.shap_values(df_subject)
-            # 力图
-            shap.force_plot(explainer.expected_value, shap_values[0], df_subject.iloc[0, :], matplotlib=True)
-            # 瀑布图
-            # ex = shap.Explanation(shap_values[1][0, :], explainer.expected_value[1], df_subject.iloc[0, :])
-            # shap.waterfall_plot(ex)
+
+            # 绘制力图
+            if isinstance(explainer.expected_value, list):
+                shap.force_plot(
+                    explainer.expected_value[1], shap_values[1][0, :], df_subject.iloc[0, :], matplotlib=True
+                )
+            else:
+                shap.force_plot(
+                    explainer.expected_value, shap_values[0], df_subject.iloc[0, :], matplotlib=True
+                )
             st.pyplot(plt.gcf())
-
-
-
 
     # 页面配置和UI
     st.set_page_config(page_title='老年糖尿病患者衰弱风险预测')
@@ -79,6 +81,6 @@ def main():
 
     if st.button(label="提交"):
         user = Subject(认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病)
-        user.make_predict()
+        user.make_predict(lgbm)
 
 main()
