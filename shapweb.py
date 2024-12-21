@@ -45,13 +45,19 @@ def main():
                 </div>
             """, unsafe_allow_html=True)
 
-            # SHAP 可视化
+
+
             explainer = shap.Explainer(lgbm)
             shap_values = explainer.shap_values(df_subject)
-
-            # 绘制 SHAP 力图
+            # 力图
             shap.force_plot(explainer.expected_value[1], shap_values[1][0, :], df_subject.iloc[0, :], matplotlib=True)
+            # 瀑布图
+            # ex = shap.Explanation(shap_values[1][0, :], explainer.expected_value[1], df_subject.iloc[0, :])
+            # shap.waterfall_plot(ex)
             st.pyplot(plt.gcf())
+
+
+
 
     # 页面配置和UI
     st.set_page_config(page_title='老年糖尿病患者衰弱风险预测')
