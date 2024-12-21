@@ -1,9 +1,3 @@
-import streamlit as st
-import shap
-import joblib
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import os
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
@@ -14,20 +8,16 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-# 自动查找常见的中文字体
-def set_chinese_font():
-    # 常见中文字体列表
-    common_fonts = ['Microsoft YaHei', 'SimSun', 'SimHei', 'Noto Sans CJK SC', 'WenQuanYi Zen Hei']
-    for font in common_fonts:
-        if font in [f.name for f in fm.fontManager.ttflist]:
-            rcParams['font.family'] = font
-            print(f"已设置字体为：{font}")
-            return
-    print("未找到常见中文字体，将使用默认字体（可能无法正常显示中文）")
-
-# 设置中文字体
-set_chinese_font()
-rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+# 设置字体路径
+font_path = "./simhei.ttf"
+if os.path.exists(font_path):
+    print(f"字体文件已找到，加载中：{font_path}")
+    font_prop = fm.FontProperties(fname=font_path)  # 加载字体
+    rcParams['font.family'] = font_prop.get_name()  # 设置全局字体
+    rcParams['axes.unicode_minus'] = False         # 防止负号显示问题
+    print(f"字体加载成功：{font_prop.get_name()}")
+else:
+    raise FileNotFoundError(f"字体文件未找到：{font_path}")
 
 def main():
     # 加载模型
@@ -64,7 +54,7 @@ def main():
             adjusted_prediction = np.round(prediction * 100, 2)
             st.write(f"""
                 <div class='all'>
-                    <p style='text-align: center; font-size: 20px;' font-family="SimHei">
+                    <p style='text-align: center; font-size: 20px;'>
                         <b>模型预测老年糖尿病患者衰弱风险为 {adjusted_prediction[0]} %</b>
                     </p>
                 </div>
@@ -83,7 +73,9 @@ def main():
                 shap.force_plot(
                     explainer.expected_value, shap_values[0], df_subject.iloc[0, :], matplotlib=True
                 )
-            plt.title("特征贡献力图", fontproperties=font_prop)  # 设置中文标题字体
+            
+            # 设置中文标题
+            plt.title("特征贡献力图", fontproperties=font_prop)
             st.pyplot(plt.gcf())  # 渲染图形
 
     # 页面配置和UI
@@ -94,6 +86,7 @@ def main():
                     <h1 style='text-align: center;'>老年糖尿病患者衰弱风险预测</h1>
                 </div>
                 """, unsafe_allow_html=True)
+
     认知障碍 = st.selectbox("认知障碍 (是 = 1, 否 = 0)", [1, 0], index=1)
     体育锻炼运动量 = st.selectbox("体育锻炼运动量 (低运动量 = 1, 中运动量 = 2, 高运动量 = 3)", [1, 2, 3], index=0)
     慢性疼痛 = st.selectbox("慢性疼痛 (有 = 1, 无 = 0)", [1, 0], index=1)
