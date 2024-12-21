@@ -10,16 +10,35 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import matplotlib.font_manager as fm
+import os
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+import matplotlib.font_manager as fm
+import shap
+import joblib
+import pandas as pd
+import numpy as np
+import streamlit as st
 
-# 设置字体路径为项目根目录下的 SimHei.ttf
-font_path = "./simhei.ttf"  # SimHei.ttf 文件应放在项目根目录
+# 字体路径设置
+font_path = "./simhei.ttf"  # 确保 simhei.ttf 文件已上传到项目根目录
 if not os.path.exists(font_path):
-    raise FileNotFoundError("找不到 SimHei.ttf 文件，请将其上传到项目根目录")
+    raise FileNotFoundError("找不到字体文件，请将 simhei.ttf 上传到项目根目录")
 
 # 加载字体
-font_prop = fm.FontProperties(fname=font_path)
-rcParams['font.family'] = font_prop.get_name()  # 设置全局字体
-rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+try:
+    font_prop = fm.FontProperties(fname=font_path)
+    plt.rcParams['font.family'] = font_prop.get_name()  # 设置字体
+    plt.rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+    print("字体文件路径:", os.path.abspath(font_path))
+    print("加载的字体名称:", font_prop.get_name())
+except Exception as e:
+    print("字体加载失败:", e)
+    raise
+
+# 重建字体缓存（可选）
+import matplotlib
+matplotlib.font_manager._rebuild()
 
 def main():
     # 加载模型
