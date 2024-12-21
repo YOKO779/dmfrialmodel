@@ -19,6 +19,15 @@ from matplotlib import rcParams
 # 检查字体加载情况
 print("当前字体设置:", rcParams['font.sans-serif'])
 
+
+import os
+font_path = "C:/Windows/Fonts/SimHei.ttf"
+if os.path.exists(font_path):
+    print("字体文件存在")
+else:
+    print("字体文件不存在")
+
+
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
