@@ -25,7 +25,7 @@ from matplotlib import rcParams
 import matplotlib.font_manager as fm
 
 # 字体路径设置
-font_path = "./simhei.ttf"  # 确保 simhei.ttf 文件已上传到项目根目录
+font_path = r"D:\dmfrailmodel\simsunb.ttf"  # 注意前面的r，表示原始字符串
 
 # 加载字体
 font_prop = fm.FontProperties(fname=font_path)
@@ -36,10 +36,9 @@ rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 
 # 测试字体是否加载成功
 plt.figure()
-plt.title('测试中文显示')
+plt.title('测试中文显示', fontproperties=font_prop)
 plt.text(0.5, 0.5, '中文测试', fontproperties=font_prop)
 plt.show()
-
 
 def main():
     # 加载模型
