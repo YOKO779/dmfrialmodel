@@ -1,27 +1,29 @@
 import os
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+import matplotlib.font_manager as fm
 import shap
 import joblib
 import pandas as pd
 import numpy as np
 import streamlit as st
 
-# 设置中文字体，避免中文乱码
-rcParams['font.family'] = 'SimHei'  # 黑体 (SimHei) for Windows or macOS 可以使用 'Songti'
+# 动态设置字体路径，确保加载正确的中文字体
+font_path = "C:/Windows/Fonts/SimHei.ttf"  # Windows 下的 SimHei 字体路径
+if not os.path.exists(font_path):  # 检查路径是否存在
+    font_path = "/System/Library/Fonts/Supplemental/Songti.ttc"  # macOS 系统
+if not os.path.exists(font_path):  # 再次检查路径是否存在
+    font_path = "/usr/share/fonts/truetype/arphic/uming.ttc"  # Linux 系统
+if not os.path.exists(font_path):  # 如果仍未找到字体
+    raise FileNotFoundError("找不到合适的中文字体文件，请检查字体路径或安装字体。")
+
+# 加载字体
+font_prop = fm.FontProperties(fname=font_path)
+rcParams['font.family'] = font_prop.get_name()  # 设置全局字体
 rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 
-from matplotlib import rcParams
-
 # 检查字体加载情况
-print("当前字体设置:", rcParams['font.sans-serif'])
-
-import os
-font_path = "C:/Windows/Fonts/SimHei.ttf"
-if os.path.exists(font_path):
-    print("字体文件存在")
-else:
-    print("字体文件不存在")
+print("当前字体设置:", rcParams['font.family'])
 
 def main():
     # 加载模型
@@ -79,7 +81,7 @@ def main():
                 )
 
             # 设置中文标题
-            plt.title("特征贡献力图")
+            plt.title("特征贡献力图", fontproperties=font_prop)
             st.pyplot(plt.gcf())  # 渲染图形
 
     # 页面配置和UI
