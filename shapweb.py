@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
-    
+
     class Subject:
         def __init__(self, 认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病):
             self.认知障碍 = 认知障碍
@@ -19,12 +19,6 @@ def main():
             self.查尔斯共病指数 = 查尔斯共病指数
             self.步速下降 = 步速下降
             self.糖尿病肾病 = 糖尿病肾病
-
-        def make_predict(self):
-            # Check for missing values (for example)
-            if not all([self.认知障碍, self.体育锻炼运动量, self.慢性疼痛, self.营养状态, self.HbA1c, self.查尔斯共病指数, self.步速下降, self.糖尿病肾病]):
-                st.error("Please fill in all the fields")
-                return
             
             # 将输入数据转化为 DataFrame
             subject_data = {
