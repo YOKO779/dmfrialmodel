@@ -5,66 +5,27 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-plt.rcParams['font.family'] = 'Times New Roman'
-plt.rcParams['axes.unicode_minus'] = False
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
-
-# 设置中文字体，避免中文乱码
-rcParams['font.family'] = 'SimHei'  # 黑体 (SimHei) for Windows or macOS 可以使用 'Songti'
-rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
-
-from matplotlib import rcParams
-
-# 检查字体加载情况
-print("当前字体设置:", rcParams['font.sans-serif'])
-
-
-import os
-font_path = "C:/Windows/Fonts/SimHei.ttf"
-if os.path.exists(font_path):
-    print("字体文件存在")
-else:
-    print("字体文件不存在")
-
-
-import requests
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import matplotlib.font_manager as fm
-import os
 
-# GitHub上的字体文件Raw URL
-font_url = 'https://raw.githubusercontent.com/YOKO779/dmfrialmodel/master/simhei.ttf'
+# 字体文件的本地路径
+font_path = r"D:\gitapp\simhei.ttf"
 
-# 下载字体文件到本地临时路径
-font_path = "simhei.ttf"
-response = requests.get(font_url)
+# 检查字体文件是否存在
+try:
+    font_prop = fm.FontProperties(fname=font_path)  # 加载字体
+    rcParams['font.family'] = font_prop.get_name()  # 设置全局字体
+    rcParams['axes.unicode_minus'] = False          # 防止负号显示问题
 
-# 确保字体文件成功下载
-if response.status_code == 200:
-    with open(font_path, "wb") as f:
-        f.write(response.content)
-    print("字体文件已成功下载并保存到本地：", font_path)
-
-    # 使用Matplotlib的FontProperties加载字体
-    font_prop = fm.FontProperties(fname=font_path)
-
-    # 设置Matplotlib使用的中文字体
-    rcParams['font.family'] = font_prop.get_name()
-    rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
-
-    # 测试绘图，确保中文正常显示
+    # 测试绘图
     plt.plot([1, 2, 3], [1, 4, 9])
     plt.title('测试中文显示', fontproperties=font_prop)
     plt.show()
 
-    # 删除临时字体文件
-    os.remove(font_path)
-    print("临时字体文件已删除。")
-else:
-    print("无法下载字体文件，HTTP状态码:", response.status_code)
-
+    print(f"字体文件加载成功：{font_path}")
+except FileNotFoundError:
+    print(f"字体文件不存在，请检查路径：{font_path}")
 
 
 def main():
