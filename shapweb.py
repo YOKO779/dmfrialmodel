@@ -28,6 +28,36 @@ else:
     print("字体文件不存在")
 
 
+import requests
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+import matplotlib.font_manager as fm
+import io
+
+# GitHub上的字体文件Raw URL
+font_url = 'https://raw.githubusercontent.com/YOKO779/dmfrialmodel/master/simhei.ttf'
+
+# 使用requests下载字体文件
+response = requests.get(font_url)
+if response.status_code == 200:
+    font_bytes = io.BytesIO(response.content)
+
+    # 使用Matplotlib的FontProperties加载字体
+    font_prop = fm.FontProperties(fname=font_bytes)
+
+    # 设置Matplotlib使用的中文字体
+    rcParams['font.family'] = font_prop.get_name()
+    rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+
+    # 测试绘图，确保中文正常显示
+    plt.plot([1, 2, 3], [1, 4, 9])
+    plt.title('测试中文显示', fontproperties=font_prop)
+    plt.show()
+else:
+    print("无法加载字体文件，HTTP状态码:", response.status_code)
+
+
+
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
