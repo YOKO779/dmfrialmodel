@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def main():
-    lgbm = joblib.load('./D/python/xgb_model.pkl')   # 本地测试路径，根据pkl文件所在位置进行更改
+    lgbm = joblib.load('./python/xgb_model.pkl')   # 本地测试路径，根据pkl文件所在位置进行更改
     # lgbm = joblib.load('./xgb_model.pkl')  # 上传到github所需路径，路径无需更改
     # 定义特征输入类
     class Subject:
