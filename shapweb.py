@@ -4,18 +4,25 @@ import joblib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import rcParams
-from matplotlib.font_manager import FontProperties
 import os
+import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 
-# 设置全局中文字体
-font_path = "D:/gitapp/simhei.ttf"  # 替换为你的字体路径
+# 使用相对路径加载字体
+font_path = "./simhei.ttf"
 if os.path.exists(font_path):
+    print("字体文件存在，加载字体...")
     font_prop = FontProperties(fname=font_path)
-    rcParams['font.family'] = font_prop.get_name()
-    rcParams['axes.unicode_minus'] = False
+    plt.rcParams['font.family'] = font_prop.get_name()
+    plt.rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 else:
-    st.error(f"字体文件未找到：{font_path}")
+    print("字体文件未找到，请检查路径：", font_path)
+
+# 测试绘图
+plt.plot([1, 2, 3], [1, 4, 9])
+plt.title('测试中文显示', fontproperties=font_prop)
+plt.show()
+
 
 def main():
     # 加载模型
