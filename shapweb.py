@@ -1,3 +1,13 @@
+import os
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+import shap
+import joblib
+import pandas as pd
+import numpy as np
+import streamlit as st
+
+
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
