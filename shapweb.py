@@ -16,18 +16,6 @@ rcParams['font.family'] = 'SimHei'  # 替换为你安装的中文字体名称
 rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 
 
-
-# 设置字体路径
-font_path = "./simhei.ttf"
-if os.path.exists(font_path):
-    print(f"字体文件已找到，加载中：{font_path}")
-    font_prop = fm.FontProperties(fname=font_path)  # 加载字体
-    rcParams['font.family'] = font_prop.get_name()  # 设置全局字体
-    rcParams['axes.unicode_minus'] = False         # 防止负号显示问题
-    print(f"字体加载成功：{font_prop.get_name()}")
-else:
-    raise FileNotFoundError(f"字体文件未找到：{font_path}")
-
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
