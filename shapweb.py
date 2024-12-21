@@ -4,6 +4,14 @@ import joblib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import rcParams, font_manager
+
+# 设置中文字体路径
+font_path = "simhei.ttf"  # 确保字体文件路径正确
+font = font_manager.FontProperties(fname=font_path)
+
+# 设置 Matplotlib 全局字体
+rcParams["font.family"] = font.get_name()
 
 def main():
     # 加载模型
@@ -40,7 +48,7 @@ def main():
             adjusted_prediction = np.round(prediction * 100, 2)
             st.write(f"""
                 <div class='all'>
-                    <p style='text-align: center; font-size: 20px;'>
+                    <p style='text-align: center; font-size: 20px;' font-family="SimHei">
                         <b>模型预测老年糖尿病患者衰弱风险为 {adjusted_prediction[0]} %</b>
                     </p>
                 </div>
@@ -59,7 +67,13 @@ def main():
                 shap.force_plot(
                     explainer.expected_value, shap_values[0], df_subject.iloc[0, :], matplotlib=True
                 )
-            st.pyplot(plt.gcf())
+            
+            # 设置中文字体
+            plt.title("SHAP 力图", fontproperties=font)  # 设置中文标题
+            plt.xlabel("影响因素", fontproperties=font)  # 设置中文横轴标签
+            plt.ylabel("影响值", fontproperties=font)  # 设置中文纵轴标签
+            
+            st.pyplot(plt.gcf())  # 渲染图形
 
     # 页面配置和UI
     st.set_page_config(page_title='老年糖尿病患者衰弱风险预测')
