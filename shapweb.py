@@ -4,39 +4,30 @@ import joblib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 import os
 import matplotlib.pyplot as plt
-from matplotlib.font_manager import FontProperties
+from matplotlib import rcParams
+import matplotlib.font_manager as fm
+import shap
+import joblib
+import pandas as pd
+import numpy as np
+import streamlit as st
 
-# 打印当前工作目录
-print("当前工作目录：", os.getcwd())
+# 自动查找常见的中文字体
+def set_chinese_font():
+    # 常见中文字体列表
+    common_fonts = ['Microsoft YaHei', 'SimSun', 'SimHei', 'Noto Sans CJK SC', 'WenQuanYi Zen Hei']
+    for font in common_fonts:
+        if font in [f.name for f in fm.fontManager.ttflist]:
+            rcParams['font.family'] = font
+            print(f"已设置字体为：{font}")
+            return
+    print("未找到常见中文字体，将使用默认字体（可能无法正常显示中文）")
 
-# 确认字体文件是否存在
-font_path = "./simhei.ttf"
-if os.path.exists(font_path):
-    print("字体文件已找到，加载中：", font_path)
-    try:
-        # 加载字体
-        font_prop = FontProperties(fname=font_path)
-        plt.rcParams['font.family'] = font_prop.get_name()
-        plt.rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
-        print("字体加载成功：", font_prop.get_name())
-
-        # 测试绘图
-        plt.plot([1, 2, 3], [1, 4, 9])
-        plt.title('测试中文显示', fontproperties=font_prop)
-        plt.show()
-    except Exception as e:
-        print("字体加载失败，错误信息：", e)
-else:
-    print("字体文件未找到，请检查路径！")
-
-# 刷新字体缓存
-import matplotlib as mpl
-print("Matplotlib 字体缓存路径：", mpl.get_cachedir())
-
-
+# 设置中文字体
+set_chinese_font()
+rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 
 def main():
     # 加载模型
