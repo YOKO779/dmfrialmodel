@@ -20,21 +20,19 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
+import os
 import matplotlib.font_manager as fm
 
-# 字体路径设置
-font_path = r"D:\dmfrailmodel\simsunb.ttf"  # 注意前面的r，表示原始字符串
+# 构建字体路径
+font_dir = r"D:\dmfrailmodel"
+font_name = "simsunb.ttf"
+font_path = os.path.join(font_dir, font_name)
 
 # 加载字体
 font_prop = fm.FontProperties(fname=font_path)
 
-# 应用字体到matplotlib
-rcParams['font.family'] = font_prop.get_name()
-rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
-
 # 测试字体是否加载成功
+import matplotlib.pyplot as plt
 plt.figure()
 plt.title('测试中文显示', fontproperties=font_prop)
 plt.text(0.5, 0.5, '中文测试', fontproperties=font_prop)
