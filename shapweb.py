@@ -4,24 +4,20 @@ import joblib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import rcParams, font_manager
 
-from matplotlib import rcParams, font_manager
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['axes.unicode_minus'] = False
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
 
-# 强制设置字体路径
-font_path = "/完整路径/simhei.ttf"  # 替换为你的字体路径
-font = font_manager.FontProperties(fname=font_path)
+# 设置中文字体，避免中文乱码
+rcParams['font.family'] = 'SimHei'  # 黑体 (SimHei) for Windows or macOS 可以使用 'Songti'
+rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 
-# 设置全局字体
-rcParams["font.family"] = font.get_name()
-rcParams["axes.unicode_minus"] = False  # 确保负号正常显示
+from matplotlib import rcParams
 
-
-
-# 设置中文字体路径
-font_path = "simhei.ttf"  # 确保字体文件路径正确
-font = font_manager.FontProperties(fname=font_path)
-rcParams["font.family"] = font.get_name()  # 全局设置字体
+# 检查字体加载情况
+print("当前字体设置:", rcParams['font.sans-serif'])
 
 def main():
     # 加载模型
