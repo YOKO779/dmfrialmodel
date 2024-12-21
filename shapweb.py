@@ -36,9 +36,6 @@ except Exception as e:
     print("字体加载失败:", e)
     raise
 
-# 重建字体缓存（可选）
-import matplotlib
-matplotlib.font_manager._rebuild()
 
 def main():
     # 加载模型
