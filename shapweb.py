@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
-    # lgbm = joblib.load('./lgbm.pkl')  # 上传到 GitHub 所需路径，路径无需更改
 
     # 定义输入特征
 
@@ -55,12 +54,14 @@ def main():
             explainer = shap.Explainer(lgbm)
             shap_values = explainer.shap_values(df_subject)
 
-            # 绘制 SHAP 力图
+            # 清除当前图形并绘制 SHAP 力图
+            plt.clf()
             shap.force_plot(explainer.expected_value[1], shap_values[1][0, :], df_subject.iloc[0, :], matplotlib=True)
             st.pyplot(plt.gcf())
-            # 瀑布图
-            # ex = shap.Explanation(shap_values[1][0, :], explainer.expected_value[1], df_subject.iloc[0, :])
-            # shap.waterfall_plot(ex)
+
+            # 清除图形并绘制瀑布图
+            plt.clf()
+            shap.waterfall_plot(shap.Explanation(shap_values[1][0, :], explainer.expected_value[1], df_subject.iloc[0, :]))
             st.pyplot(plt.gcf())
 
     # 设置页面配置
@@ -75,7 +76,7 @@ def main():
 
     # 输入特征
     认知障碍 = st.selectbox("认知障碍 (是 = 1, 否 = 0)", [1, 0], index=1)
-    体育锻炼运动量 = st.selectbox("体育锻炼运动量 (低运动量 = 1, 中运动量 = 2, 高运动量 = 3)", [1, 2, 3], index=0)
+    体育锻炼运动量 = int(st.selectbox("体育锻炼运动量 (低运动量 = 1, 中运动量 = 2, 高运动量 = 3)", [1, 2, 3], index=0))
     慢性疼痛 = st.selectbox("慢性疼痛 (有 = 1, 无 = 0)", [1, 0], index=1)
     营养状态 = st.selectbox("营养状态 (营养良好 = 0, 营养不良风险 = 1, 营养不良风险 = 2)", [0, 1, 2], index=1)
     HbA1c = st.number_input("HbA1c (mmol/L)", value=7.0, min_value=4.0, max_value=30.0)
@@ -87,7 +88,5 @@ def main():
     if st.button(label="提交"):
         user = Subject(认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病)
         user.make_predict()
-
-
 
 main()
