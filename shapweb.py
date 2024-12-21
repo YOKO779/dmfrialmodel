@@ -20,21 +20,25 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+import matplotlib.font_manager as fm
+
 # 字体路径设置
 font_path = "./simhei.ttf"  # 确保 simhei.ttf 文件已上传到项目根目录
-if not os.path.exists(font_path):
-    raise FileNotFoundError("找不到字体文件，请将 simhei.ttf 上传到项目根目录")
 
 # 加载字体
-try:
-    font_prop = fm.FontProperties(fname=font_path)
-    plt.rcParams['font.family'] = font_prop.get_name()  # 设置字体
-    plt.rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
-    print("字体文件路径:", os.path.abspath(font_path))
-    print("加载的字体名称:", font_prop.get_name())
-except Exception as e:
-    print("字体加载失败:", e)
-    raise
+font_prop = fm.FontProperties(fname=font_path)
+
+# 应用字体到matplotlib
+rcParams['font.family'] = font_prop.get_name()
+rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+
+# 测试字体是否加载成功
+plt.figure()
+plt.title('测试中文显示')
+plt.text(0.5, 0.5, '中文测试', fontproperties=font_prop)
+plt.show()
 
 
 def main():
