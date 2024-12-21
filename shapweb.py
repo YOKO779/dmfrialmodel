@@ -7,9 +7,21 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-# 全局设置 Matplotlib 默认字体
-rcParams['font.family'] = 'SimHei'  # 设置为 SimHei 或系统支持的其他中文字体
+# 设置中文字体，避免中文乱码
+rcParams['font.family'] = 'SimHei'  # 黑体 (SimHei) for Windows or macOS 可以使用 'Songti'
 rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+
+from matplotlib import rcParams
+
+# 检查字体加载情况
+print("当前字体设置:", rcParams['font.sans-serif'])
+
+import os
+font_path = "C:/Windows/Fonts/SimHei.ttf"
+if os.path.exists(font_path):
+    print("字体文件存在")
+else:
+    print("字体文件不存在")
 
 def main():
     # 加载模型
