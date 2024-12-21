@@ -1,23 +1,15 @@
 import os
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
-import matplotlib.font_manager as fm
 import shap
 import joblib
 import pandas as pd
 import numpy as np
 import streamlit as st
 
-# 设置字体路径，确保字体存在
-font_path = "./simhei.ttf"  # 将你的 SimHei.ttf 文件放在项目根目录
-if os.path.exists(font_path):
-    font_prop = fm.FontProperties(fname=font_path)  # 加载字体
-    rcParams['font.family'] = font_prop.get_name()  # 设置全局字体
-    rcParams['axes.unicode_minus'] = False         # 防止负号显示问题
-else:
-    font_prop = None  # 如果字体文件不存在，则不使用特定字体
-    rcParams['font.family'] = 'sans-serif'         # 设置默认字体
-    rcParams['axes.unicode_minus'] = False
+# 全局设置 Matplotlib 默认字体
+rcParams['font.family'] = 'SimHei'  # 设置为 SimHei 或系统支持的其他中文字体
+rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
 
 def main():
     # 加载模型
@@ -75,10 +67,7 @@ def main():
                 )
 
             # 设置中文标题
-            if font_prop:
-                plt.title("特征贡献力图", fontproperties=font_prop)
-            else:
-                plt.title("特征贡献力图")  # 如果字体文件不存在，则使用默认字体
+            plt.title("特征贡献力图")
             st.pyplot(plt.gcf())  # 渲染图形
 
     # 页面配置和UI
