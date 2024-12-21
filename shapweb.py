@@ -50,7 +50,7 @@ def main():
             explainer = shap.Explainer(lgbm)
             shap_values = explainer.shap_values(df_subject)
             # 力图
-            shap.force_plot(explainer.expected_value[1], shap_values[1][0, :], df_subject.iloc[0, :], matplotlib=True)
+            shap.force_plot(explainer.expected_value, shap_values[0], df_subject.iloc[0, :], matplotlib=True)
             # 瀑布图
             # ex = shap.Explanation(shap_values[1][0, :], explainer.expected_value[1], df_subject.iloc[0, :])
             # shap.waterfall_plot(ex)
