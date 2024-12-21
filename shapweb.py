@@ -8,6 +8,15 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+
+# 设置 Matplotlib 默认字体为 SimHei（或者其他支持中文的字体）
+rcParams['font.family'] = 'SimHei'  # 替换为你安装的中文字体名称
+rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+
+
+
 # 设置字体路径
 font_path = "./simhei.ttf"
 if os.path.exists(font_path):
