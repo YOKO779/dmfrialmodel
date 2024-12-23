@@ -12,7 +12,13 @@ from matplotlib import font_manager
 
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+from matplotlib.font_manager import FontProperties
 
+# 设置 matplotlib 显示中文字体
+rcParams['font.sans-serif'] = ['SimSun']  # 指定宋体 SimSun
+rcParams['axes.unicode_minus'] = False  # 解决负号 '-' 显示为方块的问题
 # 页面配置
 st.set_page_config(page_title='老年糖尿病患者衰弱风险预测')
 
