@@ -8,9 +8,9 @@ import numpy as np
 import streamlit as st
 
 
-# 设置中文格式
-plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']  # 用来正常显示中文标签
-plt.rcParams['axes.unicode_minus'] = False  # 解决负号 '-' 显示为方块的问题
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
+plt.rcParams['axes.unicode_minus'] = False   # 解决负号显示为方块的问题
+
 
 def main():
     # 加载模型
