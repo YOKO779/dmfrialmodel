@@ -12,18 +12,6 @@ def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
 
-    # 特征名映射：中文 -> 英文
-    feature_mapping = {
-        "认知障碍": "CognitiveImpairment",
-        "体育锻炼运动量": "ExerciseAmount",
-        "慢性疼痛": "ChronicPain",
-        "营养状态": "NutritionStatus",
-        "HbA1c": "HbA1c",
-        "查尔斯共病指数": "CharlsonIndex",
-        "步速下降": "GaitDecline",
-        "糖尿病肾病": "DiabeticNephropathy"
-    }
-
     class Subject:
         def __init__(self, 认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病):
             self.认知障碍 = 认知障碍
