@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from matplotlib import font_manager
 
 # 手动指定字体路径
-font_path = r"C:\Users\10995\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\mpl-data\fonts\ttf\SimHei.ttf"
+font_path = "C:/Users/10995/AppData/Local/Programs/Python/Python312/Lib/site-packages/matplotlib/mpl-data/fonts/ttf/SimHei.ttf"
 font_prop = font_manager.FontProperties(fname=font_path)
 
 # 设置全局字体
