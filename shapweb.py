@@ -7,6 +7,18 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
+import matplotlib.pyplot as plt
+from matplotlib import font_manager
+
+import matplotlib.pyplot as plt
+from matplotlib import font_manager
+
+# 手动指定字体路径
+font_path = r"C:\Users\10995\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\mpl-data\fonts\ttf\SimHei.ttf"
+font_prop = font_manager.FontProperties(fname=font_path)
+
+# 设置全局字体
+plt.rcParams['font.family'] = font_prop.get_name()
 plt.rcParams['font.sans-serif']=['SimHei'] 
 
 plt.rcParams['font.family'] = 'Times New Roman'
