@@ -39,9 +39,6 @@ def main():
             # 创建 DataFrame
             df_subject = pd.DataFrame(subject_data)
 
-            # 重命名列名为模型的特征名
-            df_subject.rename(columns=feature_mapping, inplace=True)
-
             # 模型预测
             prediction = lgbm.predict_proba(df_subject)[:, 1]
             adjusted_prediction = np.round(prediction * 100, 2)
