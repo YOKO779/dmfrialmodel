@@ -13,39 +13,6 @@ from matplotlib import font_manager
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
 
-# 手动指定字体路径
-font_path = "C:/Users/10995/AppData/Local/Programs/Python/Python312/Lib/site-packages/matplotlib/mpl-data/fonts/ttf/SimHei.ttf"
-font_prop = font_manager.FontProperties(fname=font_path)
-
-# 设置全局字体
-plt.rcParams['font.family'] = font_prop.get_name()
-plt.rcParams['font.sans-serif']=['SimHei'] 
-
-plt.rcParams['font.family'] = 'Times New Roman'
-plt.rcParams['axes.unicode_minus'] = False
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
-
-# 设置中文字体，避免中文乱码
-rcParams['font.family'] = 'SimHei'  # 黑体 (SimHei) for Windows or macOS 可以使用 'Songti'
-rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
-
-from matplotlib import rcParams
-
-# 检查字体加载情况
-print("当前字体设置:", rcParams['font.sans-serif'])
-
-import os
-font_path = "C:/Windows/Fonts/SimHei.ttf"
-if os.path.exists(font_path):
-    print("字体文件存在")
-else:
-    print("字体文件不存在")
-
-import matplotlib.pyplot as plt
-
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
-plt.rcParams['axes.unicode_minus'] = False    # 解决负号显示为方块的问题
 # 页面配置
 st.set_page_config(page_title='老年糖尿病患者衰弱风险预测')
 
