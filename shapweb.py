@@ -1,19 +1,44 @@
-import streamlit as st
+import os
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
 import shap
 import joblib
 import pandas as pd
 import numpy as np
+import streamlit as st
+
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['axes.unicode_minus'] = False
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
+
+# 设置中文字体，避免中文乱码
+rcParams['font.family'] = 'SimHei'  # 黑体 (SimHei) for Windows or macOS 可以使用 'Songti'
+rcParams['axes.unicode_minus'] = False  # 防止负号显示问题
+
+from matplotlib import rcParams
+
+# 检查字体加载情况
+print("当前字体设置:", rcParams['font.sans-serif'])
+
+import os
+font_path = "C:/Windows/Fonts/SimHei.ttf"
+if os.path.exists(font_path):
+    print("字体文件存在")
+else:
+    print("字体文件不存在")
+
+import matplotlib.pyplot as plt
+
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
+plt.rcParams['axes.unicode_minus'] = False    # 解决负号显示为方块的问题
+
 
 
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
-    # lgbm = joblib.load('./lgbm.pkl')  # 上传到 GitHub 所需路径，路径无需更改
 
-    # 定义输入特征
-
-    # 定义特征输入类
     class Subject:
         def __init__(self, 认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病):
             self.认知障碍 = 认知障碍
@@ -25,55 +50,68 @@ def main():
             self.步速下降 = 步速下降
             self.糖尿病肾病 = 糖尿病肾病
 
-        def make_predict(self):
-            # 将输入数据转化为 DataFrame
-            subject_data = {
-                "认知障碍": [self.认知障碍],
-                "体育锻炼运动量": [self.体育锻炼运动量],
-                "慢性疼痛": [self.慢性疼痛],
-                "营养状态": [self.营养状态],
-                "HbA1c": [self.HbA1c],
-                "查尔斯共病指数": [self.查尔斯共病指数],
-                "步速下降": [self.步速下降],
-                "糖尿病肾病": [self.糖尿病肾病]
-            }
+    def make_predict(self, lgbm):
+    # 构造输入数据
+    subject_data = {
+        "认知障碍": [self.认知障碍],
+        "体育锻炼运动量": [self.体育锻炼运动量],
+        "慢性疼痛": [self.慢性疼痛],
+        "营养状态": [self.营养状态],
+        "HbA1c": [self.HbA1c],
+        "查尔斯共病指数": [self.查尔斯共病指数],
+        "步速下降": [self.步速下降],
+        "糖尿病肾病": [self.糖尿病肾病]
+    }
+    df_subject = pd.DataFrame(subject_data)
 
-            df_subject = pd.DataFrame(subject_data)
+    # 重命名列名为模型的特征名
+    df_subject.rename(columns=feature_mapping, inplace=True)
 
-            # 模型预测
-            prediction = lgbm.predict_proba(df_subject)[:, 1]
-            adjusted_prediction = np.round(prediction * 100, 2)
-            st.write(f"""
-                <div class='all'>
-                    <p style='text-align: center; font-size: 20px;'>
-                        <b>模型预测老年糖尿病患者衰弱风险为 {adjusted_prediction[0]} %</b>
-                    </p>
-                </div>
-            """, unsafe_allow_html=True)
+    # 模型预测
+    prediction = lgbm.predict_proba(df_subject)[:, 1]
+    adjusted_prediction = np.round(prediction * 100, 2)
+    st.write(f"""
+        <div class='all'>
+            <p style='text-align: center; font-size: 20px;'>
+                <b>模型预测老年糖尿病患者衰弱风险为 {adjusted_prediction[0]} %</b>
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
 
-            # SHAP 可视化
-            explainer = shap.Explainer(lgbm)
-            shap_values = explainer.shap_values(df_subject)
+    # SHAP 可视化
+    explainer = shap.TreeExplainer(lgbm)
+    shap_values = explainer.shap_values(df_subject)
 
-            # 绘制 SHAP 力图
-            shap.force_plot(explainer.expected_value[1], shap_values[1][0, :], df_subject.iloc[0, :], matplotlib=True)
-            st.pyplot(plt.gcf())
-            # 瀑布图
-            # ex = shap.Explanation(shap_values[1][0, :], explainer.expected_value[1], df_subject.iloc[0, :])
-            # shap.waterfall_plot(ex)
-            st.pyplot(plt.gcf())
+    # 检查是否为多分类
+    if isinstance(explainer.expected_value, list):  # 多分类情况
+        expected_value = explainer.expected_value[1]
+        shap_value = shap_values[1][0, :]
+    else:  # 二分类情况
+        expected_value = explainer.expected_value
+        shap_value = shap_values[0, :]
 
-    # 设置页面配置
+    # 绘制 SHAP 力图
+    shap.force_plot(
+        expected_value,    # 基准值
+        shap_value,        # 特征贡献值
+        df_subject.iloc[0, :],  # 当前样本特征
+        matplotlib=True
+    )
+
+    # 添加标题并渲染图形
+    plt.title("特征贡献力图")
+    st.pyplot(plt.gcf())
+
+
+    # 页面配置和UI
     st.set_page_config(page_title='老年糖尿病患者衰弱风险预测')
 
-    # 页面标题
     st.markdown(f"""
                 <div class='all'>
                     <h1 style='text-align: center;'>老年糖尿病患者衰弱风险预测</h1>
                 </div>
                 """, unsafe_allow_html=True)
 
-    # 输入特征
     认知障碍 = st.selectbox("认知障碍 (是 = 1, 否 = 0)", [1, 0], index=1)
     体育锻炼运动量 = st.selectbox("体育锻炼运动量 (低运动量 = 1, 中运动量 = 2, 高运动量 = 3)", [1, 2, 3], index=0)
     慢性疼痛 = st.selectbox("慢性疼痛 (有 = 1, 无 = 0)", [1, 0], index=1)
@@ -83,11 +121,8 @@ def main():
     步速下降 = st.selectbox("步速下降 (是 = 1, 否 = 0)", [1, 0], index=1)
     糖尿病肾病 = st.selectbox("糖尿病肾病 (有 = 1, 无 = 0)", [1, 0], index=1)
 
-    # 提交按钮
     if st.button(label="提交"):
         user = Subject(认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病)
-        user.make_predict()
-
-
+        user.make_predict(lgbm)
 
 main()
