@@ -7,24 +7,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-
-import streamlit as st
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
-
-# 设置字体
-rcParams['font.sans-serif'] = ['SimHei']
-rcParams['axes.unicode_minus'] = False
-
-# 测试绘图
-fig, ax = plt.subplots()
-ax.plot([1, 2, 3], [4, 5, 6])
-ax.set_title("Streamlit 测试中文字体", fontsize=16)
-
-# 在 Streamlit 中展示图形
-st.pyplot(fig)
-
-
+plt.rcParams['font.sans-serif']=['SimHei'] 
 
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['axes.unicode_minus'] = False
