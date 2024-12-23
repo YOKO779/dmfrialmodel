@@ -1,21 +1,19 @@
-import os
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
+import streamlit as st
 import shap
 import joblib
 import pandas as pd
 import numpy as np
-import streamlit as st
-
-
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体
-plt.rcParams['axes.unicode_minus'] = False   # 解决负号显示为方块的问题
+import matplotlib.pyplot as plt
 
 
 def main():
     # 加载模型
     lgbm = joblib.load('xgb_model.pkl')  # 更新模型路径
+    # lgbm = joblib.load('./lgbm.pkl')  # 上传到 GitHub 所需路径，路径无需更改
 
+    # 定义输入特征
+
+    # 定义特征输入类
     class Subject:
         def __init__(self, 认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病):
             self.认知障碍 = 认知障碍
@@ -27,7 +25,7 @@ def main():
             self.步速下降 = 步速下降
             self.糖尿病肾病 = 糖尿病肾病
 
-        def make_predict(self, lgbm):
+        def make_predict(self):
             # 将输入数据转化为 DataFrame
             subject_data = {
                 "认知障碍": [self.认知障碍],
@@ -40,7 +38,6 @@ def main():
                 "糖尿病肾病": [self.糖尿病肾病]
             }
 
-            # 创建 DataFrame
             df_subject = pd.DataFrame(subject_data)
 
             # 模型预测
@@ -55,32 +52,28 @@ def main():
             """, unsafe_allow_html=True)
 
             # SHAP 可视化
-            explainer = shap.TreeExplainer(lgbm)
+            explainer = shap.Explainer(lgbm)
             shap_values = explainer.shap_values(df_subject)
 
-            # 绘制力图
-            if isinstance(explainer.expected_value, list):
-                shap.force_plot(
-                    explainer.expected_value[1], shap_values[1][0, :], df_subject.iloc[0, :], matplotlib=True
-                )
-            else:
-                shap.force_plot(
-                    explainer.expected_value, shap_values[0], df_subject.iloc[0, :], matplotlib=True
-                )
+            # 绘制 SHAP 力图
+            shap.force_plot(explainer.expected_value[1], shap_values[1][0, :], df_subject.iloc[0, :], matplotlib=True)
+            st.pyplot(plt.gcf())
+            # 瀑布图
+            # ex = shap.Explanation(shap_values[1][0, :], explainer.expected_value[1], df_subject.iloc[0, :])
+            # shap.waterfall_plot(ex)
+            st.pyplot(plt.gcf())
 
-            # 设置中文标题
-            plt.title("特征贡献力图")  # 全局字体已设置，无需显式指定
-            st.pyplot(plt.gcf())  # 渲染图形
-
-    # 页面配置和UI
+    # 设置页面配置
     st.set_page_config(page_title='老年糖尿病患者衰弱风险预测')
 
+    # 页面标题
     st.markdown(f"""
                 <div class='all'>
                     <h1 style='text-align: center;'>老年糖尿病患者衰弱风险预测</h1>
                 </div>
                 """, unsafe_allow_html=True)
 
+    # 输入特征
     认知障碍 = st.selectbox("认知障碍 (是 = 1, 否 = 0)", [1, 0], index=1)
     体育锻炼运动量 = st.selectbox("体育锻炼运动量 (低运动量 = 1, 中运动量 = 2, 高运动量 = 3)", [1, 2, 3], index=0)
     慢性疼痛 = st.selectbox("慢性疼痛 (有 = 1, 无 = 0)", [1, 0], index=1)
@@ -90,8 +83,11 @@ def main():
     步速下降 = st.selectbox("步速下降 (是 = 1, 否 = 0)", [1, 0], index=1)
     糖尿病肾病 = st.selectbox("糖尿病肾病 (有 = 1, 无 = 0)", [1, 0], index=1)
 
+    # 提交按钮
     if st.button(label="提交"):
         user = Subject(认知障碍, 体育锻炼运动量, 慢性疼痛, 营养状态, HbA1c, 查尔斯共病指数, 步速下降, 糖尿病肾病)
-        user.make_predict(lgbm)
+        user.make_predict()
+
+
 
 main()
